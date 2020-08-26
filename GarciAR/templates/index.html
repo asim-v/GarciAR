@@ -1,0 +1,6 @@
+{%extends 'layout.html'%}
+
+{% block body %}
+<H1>Bienvenido al mundo</H1>
+<button type="button" onclick="window.location.href='{{ url_for( 'explorer' ) }}';">Iniciar</button>
+{% endblock %}
