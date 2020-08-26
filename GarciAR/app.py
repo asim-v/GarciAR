@@ -15,13 +15,6 @@ import json
 
 
 
-# imports for firebase
-from firebase_admin import credentials, firestore, auth
-import firebase_admin.db as rtdb
-import firebase_admin
-import firebase
-from google.cloud import storage
-from google.oauth2 import service_account
 
 import sys#DEBUG
 import os#DEBUG
@@ -75,6 +68,14 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 def dbinit():
+
+  # imports for firebase
+  from firebase_admin import credentials, firestore, auth
+  import firebase_admin.db as rtdb
+  import firebase_admin
+  import firebase
+  from google.cloud import storage
+  from google.oauth2 import service_account
 
   # initializes fb with bucket name
   cred = credentials.Certificate(CONFIG)
@@ -151,7 +152,13 @@ def save_file(file,uid = None):
 
     return filename
 
-@app.route('/admin')
+def getFiles():
+  '''
+    Tiene que devolver una lista con los objetos de la bd
+  '''
+  pass
+
+@app.route('/admin', methods=["GET","POST"])
 def admin():
   '''
   Basicamente hacer usuario y contraseña  (Super simple, incluso puede ser un 'a' == 'a') 
@@ -160,15 +167,19 @@ def admin():
     - Nombre, medidas y descripción
    - Mapas para el explorador
   '''
-  return render_template('admin.html')
+  if (request.method == "POST"):
+    user_email = request.form['userEmail']
+    user_password = request.form['userPassword']
+    if user_email == 'admin' and user_password == '12345':
+      return render_template('admin.html',auth = True)
+    else:
+      return render_template('admin.html',auth = False,msg = "Usuario o contraseña incorrectos")
+  return  render_template('admin.html',auth = False)
 
 
-
-
-
-
-
-
+@app.route('/update',methods=["POST"])
+def update():
+  return redirect(url_for("admin"))
 
 
 ##Archivos Estáticos

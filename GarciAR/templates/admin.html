@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+
+{% block body %}
+<h2>{{msg}}</h2>
+{% if not auth%}
+	<form method="POST"  action="{{ url_for('admin') }}">
+		<input type="text" name="userEmail" placeholder="usuario"><br>
+		<input type="password" name="userPassword" placeholder="contraseña"><br>
+		<button type="submit">Login</button>
+	</form>
+{% elif auth %}
+	<form method="POST" action="{{ url_for('update')}}">
+		<table class="ptable">
+			<th>
+				<tr>Nombre</tr>
+				<tr>Descripción</tr>
+				<TR>Archivo</TR>
+			</th>
+			{% for entry in data %}
+				<td>
+					<tr>entry.name</tr>
+					<tr>entry.description</tr>
+					{% if entry.filename != None%}
+						<tr>entry.filename</tr>
+					{% endif %}
+					<input type="file" id="myFile" name="filename"><br>
+					<input type="submit">
+
+				</td>
+			{% endfor %}
+		</table>
+	</form>
+{% endif %}
+{% endblock %}
